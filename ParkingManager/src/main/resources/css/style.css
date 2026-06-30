@@ -1,0 +1,49 @@
+.root {
+    -fx-background-image: url("/css/images/mainbg.jpeg");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+
+    -fx-font-family: 'Segoe UI', 'Vazir', sans-serif;
+    -fx-font-size: 17px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #000000, 1, 0, 0, 0); /* سایه سفید برای خوانایی بهتر */
+}
+
+.label {
+    -fx-font-size: 20px;
+    -fx-padding: 5px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, #1e0d0d, 1, 0, 0, 0); /* سایه سفید برای خوانایی بهتر */
+}
+
+.button {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(to bottom, #2c3e50, #1a2632);
+    -fx-background-radius: 8px;
+}
+
+.text-field {
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, #1e0d0d, 1, 0, 0, 0); /* سایه سفید برای خوانایی بهتر */
+}
+.text-area {
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #000000;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, #1e0d0d, 1, 0, 0, 0); /* سایه سفید برای خوانایی بهتر */
+}
+

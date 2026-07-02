@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ParkingManager:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ParkingManager_jar</output-path>
+    <root id="archive" name="ParkingManager.jar">
+      <element id="module-output" name="ParkingManager" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/javafxLib/javafx-swt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/javafxLib/javafx.web.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/javafxLib/javafx.base.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/javafxLib/javafx.fxml.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/javafxLib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/javafxLib/javafx.swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/javafxLib/javafx.controls.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/javafxLib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/PersianColender/icu4j-69.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Lib/sqlLiteLib/sqlite-jdbc-3.46.1.3.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

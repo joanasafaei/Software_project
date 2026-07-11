@@ -6,5 +6,5 @@ package com.parking.manager.model;
 public enum Role {
     OWNER,      // مالک – دسترسی کامل
     ADMIN,      // ادمین – تقریباً همه دسترسی‌ها جز حذف کاربران
-    OPERATOR    // اپراتور – فقط ثبت ورود/خروج و مشاهده لیست
+    OPERATOR   // اپراتور – فقط ثبت ورود/خروج و مشاهده لیست
 }

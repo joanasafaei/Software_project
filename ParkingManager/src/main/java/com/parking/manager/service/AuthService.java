@@ -38,10 +38,7 @@ public class AuthService {
         if (requesterRole != Role.OWNER && requesterRole != Role.ADMIN) {
             throw new SecurityException("دسترسی غیرمجاز: فقط مالک یا ادمین می‌توانند کاربر ایجاد کنند.");
         }
-        // اعتبارسنجی رمز عبور (قبل از هش کردن)
-        if (!PasswordValidator.isValid(newUser.getPasswordHash())) {
-            throw new IllegalArgumentException(PasswordValidator.getErrorMessage());
-        }
+
         // بررسی عدم تکراری بودن نام کاربری
         if (DatabaseManager.getUserByUsername(newUser.getUsername()) != null) {
             throw new SQLException("نام کاربری تکراری است.");

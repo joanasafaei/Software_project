@@ -4,6 +4,7 @@ import com.parking.manager.model.*;
 import com.parking.manager.service.AuthService;
 import com.parking.manager.service.ShiftService;
 import com.parking.manager.util.PersianDatePickerUtil;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
@@ -18,6 +19,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.parking.manager.util.PersianDateUtil;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * کنترلر مدیریت شیفت‌های کاری اپراتورها
@@ -79,14 +84,41 @@ public class ShiftManagementController {
         colOp.setMinWidth(150);
         colOp.setStyle("-fx-alignment: center");
         colOp.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getOperatorUsername()));
+
+        // فرمت تاریخ در دیتابیس (با فاصله)
+        DateTimeFormatter dbFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         TableColumn<Shift, String> colStart = new TableColumn<>("شروع شیفت");
         colStart.setMinWidth(220);
         colStart.setStyle("-fx-alignment: center");
-        colStart.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getStartTime()));
+        colStart.setCellValueFactory(cell -> {
+            String start = cell.getValue().getStartTime();
+            if (start == null || start.isEmpty()) return new SimpleStringProperty("");
+            try {
+                LocalDateTime dateTime = LocalDateTime.parse(start, dbFormatter);
+                dateTime = dateTime.minusHours(1);
+                // استفاده از PersianDateUtil.toPersianDateTime مانند MainController
+                return new SimpleStringProperty(PersianDateUtil.toPersianDateTime(dateTime));
+            } catch (Exception e) {
+                return new SimpleStringProperty(start);
+            }
+        });
+
         TableColumn<Shift, String> colEnd = new TableColumn<>("پایان شیفت");
         colEnd.setMinWidth(220);
         colEnd.setStyle("-fx-alignment: center");
-        colEnd.setCellValueFactory(cell -> new javafx.beans.property.SimpleStringProperty(cell.getValue().getEndTime() == null ? "فعال" : cell.getValue().getEndTime()));
+        colEnd.setCellValueFactory(cell -> {
+            String end = cell.getValue().getEndTime();
+            if (end == null || end.isEmpty()) return new SimpleStringProperty("فعال");
+            try {
+                LocalDateTime dateTime = LocalDateTime.parse(end, dbFormatter);
+                dateTime = dateTime.minusHours(1);
+                return new SimpleStringProperty(PersianDateUtil.toPersianDateTime(dateTime));
+            } catch (Exception e) {
+                return new SimpleStringProperty(end);
+            }
+        });
+
         shiftTable.getColumns().addAll(colOp, colStart, colEnd);
         shiftTable.setPrefHeight(380);
         shiftTable.setStyle("-fx-text-fill: Black;");
@@ -180,3 +212,4 @@ public class ShiftManagementController {
 
     public Parent getRoot() { return root; }
 }
+

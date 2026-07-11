@@ -168,9 +168,9 @@ public class DatabaseManager {
         }
     }
 
-    // ایجاد کاربر مالک پیش‌فرض (نام کاربری: owner ، رمز: admin123)
     private static void insertDefaultUser() {
-        String check = "SELECT COUNT(*) FROM users WHERE username = 'owner'";
+        // به جای چک کردن username، چک کنید که آیا کاربری با نقش OWNER وجود دارد
+        String check = "SELECT COUNT(*) FROM users WHERE role = 'OWNER'";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(check);
              ResultSet rs = ps.executeQuery()) {
@@ -407,10 +407,11 @@ public class DatabaseManager {
     // ----------------------------------------------------------------------
     // عملیات شیفت‌های کاری
     // ----------------------------------------------------------------------
+
     public static void startShift(String operatorUsername) throws SQLException {
         // ابتدا شیفت باز قبلی را می‌بندیم
         endShift(operatorUsername);
-        String sql = "INSERT INTO shifts (operator_username, start_time, is_active) VALUES (?, datetime('now'), 1)";
+        String sql = "INSERT INTO shifts (operator_username, start_time, is_active) VALUES (?, datetime('now', 'localtime'), 1)";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, operatorUsername);
             pstmt.executeUpdate();
@@ -418,12 +419,13 @@ public class DatabaseManager {
     }
 
     public static void endShift(String operatorUsername) throws SQLException {
-        String sql = "UPDATE shifts SET end_time = datetime('now'), is_active = 0 WHERE operator_username = ? AND is_active = 1";
+        String sql = "UPDATE shifts SET end_time = datetime('now', 'localtime'), is_active = 0 WHERE operator_username = ? AND is_active = 1";
         try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, operatorUsername);
             pstmt.executeUpdate();
         }
     }
+
 
     public static List<Shift> getOperatorShifts(String operatorUsername, LocalDate from, LocalDate to) throws SQLException {
         List<Shift> shifts = new ArrayList<>();

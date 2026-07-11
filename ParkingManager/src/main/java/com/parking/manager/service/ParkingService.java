@@ -36,6 +36,13 @@ public class ParkingService {
      * @return جای پارک تخصیص داده شده (برای نمایش به کاربر)
      */
     public ParkingSpot registerEntry(String plateNumber, VehicleType type) throws SQLException {
+        // 0. بررسی تکراری نبودن پلاک در نشست‌های فعال
+        List<ParkingSession> activeSessions = DatabaseManager.getAllActiveSessions();
+        boolean alreadyExists = activeSessions.stream()
+                .anyMatch(s -> s.getVehicle().getPlateNumber().equals(plateNumber));
+        if (alreadyExists) {
+            throw new RuntimeException("این پلاک قبلاً در پارکینگ ثبت شده و هنوز خارج نشده است.");
+        }
         // 1. بررسی ظرفیت
         if (getCurrentOccupancy() >= getMaxCapacity()) {
             throw new RuntimeException("پارکینگ پر است! امکان ورود وجود ندارد.");

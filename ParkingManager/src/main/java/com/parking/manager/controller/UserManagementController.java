@@ -25,6 +25,7 @@ import java.util.List;
  * فقط مالک و ادمین دسترسی دارند – محدودیت در سطح متدها اعمال می‌شود
  */
 public class UserManagementController {
+
     private User currentUser;
     private AuthService authService = new AuthService();
     private BorderPane root;
@@ -48,20 +49,29 @@ public class UserManagementController {
         String colFullNameStr = "نام کامل";
         String colRoleStr = "نقش";
 
-
         userTable = new TableView<>();
+
         TableColumn<User, String> colUser = new TableColumn<>(colUserStr);
         colUser.setMinWidth(170);
         colUser.setStyle("-fx-alignment: center");
-        colUser.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getUsername()));
+        colUser.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getUsername())
+        );
+
         TableColumn<User, String> colFullName = new TableColumn<>(colFullNameStr);
         colFullName.setMinWidth(170);
         colFullName.setStyle("-fx-alignment: center");
-        colFullName.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getFullName()));
+        colFullName.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getFullName())
+        );
+
         TableColumn<User, String> colRole = new TableColumn<>(colRoleStr);
         colRole.setMinWidth(150);
         colRole.setStyle("-fx-alignment: center");
-        colRole.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getRole().name()));
+        colRole.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getRole().name())
+        );
+
         userTable.getColumns().addAll(colUser, colFullName, colRole);
         userTable.setPrefHeight(380);
         userTable.setStyle("-fx-font-weight: bold; -fx-text-fill: Black;");
@@ -77,26 +87,36 @@ public class UserManagementController {
         hBox.setPadding(new Insets(15));
 
         btnAdd.setOnAction(e -> showAddEditDialog(null));
+
         btnEdit.setOnAction(e -> {
             User selected = userTable.getSelectionModel().getSelectedItem();
-            if (selected != null) showAddEditDialog(selected);
-            else showAlert("لطفاً یک کاربر را انتخاب کنید.");
+            if (selected != null) {
+                showAddEditDialog(selected);
+            } else {
+                showAlert("لطفاً یک کاربر را انتخاب کنید.");
+            }
         });
+
         btnArchive.setOnAction(e -> {
             User selected = userTable.getSelectionModel().getSelectedItem();
-            if (selected != null) archiveUser(selected);
-            else showAlert("لطفاً یک کاربر را انتخاب کنید.");
+            if (selected != null) {
+                archiveUser(selected);
+            } else {
+                showAlert("لطفاً یک کاربر را انتخاب کنید.");
+            }
         });
+
         btnRefresh.setOnAction(e -> loadUsers());
 
         VBox vbox = new VBox(10, title, userTable, hBox);
         vbox.setPadding(new Insets(10));
         vbox.setAlignment(Pos.TOP_RIGHT);
+
         root.setCenter(vbox);
 
-        //کلیدهای میانبر منو شیفت
+        // کلیدهای میانبر منو
         root.setOnKeyPressed(e -> {
-            switch (e.getCode()){
+            switch (e.getCode()) {
                 case F1:
                     btnRefresh.fire();
                     break;
@@ -110,6 +130,7 @@ public class UserManagementController {
                     btnAdd.fire();
                     break;
                 default:
+                    break;
             }
             e.consume();
         });
@@ -140,51 +161,58 @@ public class UserManagementController {
             fullNameField.setText(existingUser.getFullName());
             roleCombo.setValue(existingUser.getRole());
             passwordField.setPromptText("در صورت تمایل رمز جدید وارد کنید");
-        } else {passwordField.setPromptText("رمز عبور (الزامی)");
+        } else {
+            passwordField.setPromptText("رمز عبور (الزامی)");
         }
 
         GridPane grid = new GridPane();
         grid.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         grid.setHgap(10);
         grid.setVgap(10);
+
         grid.addRow(0, new Label("نام کاربری:"), usernameField);
         grid.addRow(1, new Label("نام کامل:"), fullNameField);
         grid.addRow(2, new Label("رمز عبور:"), passwordField);
         grid.addRow(3, new Label("نقش:"), roleCombo);
 
-        // کلیدهای میانبر برای dialog
+        // کلیدهای میانبر برای Dialog
         usernameField.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.DOWN){
+            if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.DOWN) {
                 fullNameField.requestFocus();
                 fullNameField.selectAll();
                 e.consume();
             }
         });
+
         fullNameField.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.DOWN){
+            if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.DOWN) {
                 passwordField.requestFocus();
                 passwordField.selectAll();
                 e.consume();
             }
-            if (e.getCode() == KeyCode.UP){
+
+            if (e.getCode() == KeyCode.UP) {
                 usernameField.requestFocus();
                 usernameField.selectAll();
                 e.consume();
             }
         });
+
         passwordField.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.DOWN){
+            if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.DOWN) {
                 roleCombo.requestFocus();
                 e.consume();
             }
-            if (e.getCode() == KeyCode.UP){
+
+            if (e.getCode() == KeyCode.UP) {
                 fullNameField.requestFocus();
                 fullNameField.selectAll();
                 e.consume();
             }
         });
+
         roleCombo.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.LEFT){
+            if (e.getCode() == KeyCode.LEFT) {
                 passwordField.requestFocus();
                 passwordField.selectAll();
                 e.consume();
@@ -192,27 +220,24 @@ public class UserManagementController {
         });
 
         dialog.getDialogPane().setContent(grid);
+
         ButtonType saveBtn = new ButtonType("ذخیره", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancelBtn = new ButtonType("لغو", ButtonBar.ButtonData.CANCEL_CLOSE);
+
         dialog.getDialogPane().getButtonTypes().addAll(saveBtn, cancelBtn);
         dialog.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
-        if (existingUser == null){
-            dialog.setOnShown(e -> {
-                Platform.runLater(() -> {
-                    usernameField.requestFocus();
-                    usernameField.selectAll();
-                });
-            });
-        }else {
-            dialog.setOnShown(e -> {
-                Platform.runLater(() -> {
-                    fullNameField.requestFocus();
-                    fullNameField.selectAll();
-                });
-            });
+        if (existingUser == null) {
+            dialog.setOnShown(e -> Platform.runLater(() -> {
+                usernameField.requestFocus();
+                usernameField.selectAll();
+            }));
+        } else {
+            dialog.setOnShown(e -> Platform.runLater(() -> {
+                fullNameField.requestFocus();
+                fullNameField.selectAll();
+            }));
         }
-
 
         dialog.setResultConverter(btn -> {
             if (btn == saveBtn) {
@@ -220,51 +245,87 @@ public class UserManagementController {
                     String username = usernameField.getText().trim();
                     String fullName = fullNameField.getText().trim();
                     Role role = roleCombo.getValue();
+
                     if (existingUser == null) {
                         String password = passwordField.getText();
+
                         if (username.isEmpty() || fullName.isEmpty() || password.isEmpty() || role == null) {
                             throw new IllegalArgumentException("همه فیلدها الزامی است.");
-                        }if (!PasswordValidator.isValid(password)) {
-                            showAlert(PasswordValidator.getErrorMessage());
-                        }else {
-                            String hash = PasswordHasher.hash(password);
-                            User newUser = new User(username, hash, role, fullName, false);
-                            authService.createUser(newUser, currentUser.getRole());
-                        }} else {
-                        // ویرایش: فقط نام کامل و نقش قابل تغییر است (رمز به صورت جداگانه در پروفایل)
-                        authService.updateUser(existingUser.getUsername(), fullName, role, false, currentUser.getRole());
-                        // اگر رمز جدید وارد شده باشد، تغییر بده
+                        }
+
+                        if (!PasswordValidator.isValid(password)) {
+                            throw new IllegalArgumentException(PasswordValidator.getErrorMessage());
+                        }
+
+                        String hash = PasswordHasher.hash(password);
+                        User newUser = new User(username, hash, role, fullName, false);
+                        authService.createUser(newUser, currentUser.getRole());
+
+                    } else {
+                        if (fullName.isEmpty() || role == null) {
+                            throw new IllegalArgumentException("نام کامل و نقش الزامی است.");
+                        }
+
+                        authService.updateUser(
+                                existingUser.getUsername(),
+                                fullName,
+                                role,
+                                false,
+                                currentUser.getRole()
+                        );
+
                         String newPassword = passwordField.getText();
-                        if (PasswordValidator.isValid(newPassword)) {
-                            authService.changePassword(existingUser.getUsername(), "", newPassword); // نیاز به رمز فعلی ندارد – مشکل امنیتی!
-                        }else {
-                            showAlert(PasswordValidator.getErrorMessage());
+
+                        if (newPassword != null && !newPassword.isBlank()) {
+                            if (!PasswordValidator.isValid(newPassword)) {
+                                throw new IllegalArgumentException(PasswordValidator.getErrorMessage());
+                            }
+
+                            authService.changePassword(
+                                    existingUser.getUsername(),
+                                    "",
+                                    newPassword
+                            );
                         }
                     }
+
                     loadUsers();
+
                 } catch (Exception ex) {
                     showAlert("خطا: " + ex.getMessage());
                 }
             }
+
             return null;
         });
+
         dialog.showAndWait();
     }
 
     private void archiveUser(User user) {
         ButtonType yesBtn = new ButtonType("بله", ButtonBar.ButtonData.OK_DONE);
         ButtonType noBtn = new ButtonType("خیر", ButtonBar.ButtonData.CANCEL_CLOSE);
+
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("بایگانی کاربر");
         confirm.setHeaderText("آیا کاربر " + user.getUsername() + " بایگانی شود؟");
         confirm.setContentText("کاربر بایگانی شده قادر به ورود نخواهد بود.");
         confirm.getButtonTypes().setAll(yesBtn, noBtn);
         confirm.getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+
         confirm.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
+            if (response == yesBtn) {
                 try {
-                    authService.updateUser(user.getUsername(), user.getFullName(), user.getRole(), true, currentUser.getRole());
+                    authService.updateUser(
+                            user.getUsername(),
+                            user.getFullName(),
+                            user.getRole(),
+                            true,
+                            currentUser.getRole()
+                    );
+
                     loadUsers();
+
                 } catch (Exception e) {
                     showAlert("خطا در بایگانی: " + e.getMessage());
                 }
@@ -279,5 +340,7 @@ public class UserManagementController {
         alert.showAndWait();
     }
 
-    public Parent getRoot() { return root; }
+    public Parent getRoot() {
+        return root;
+    }
 }

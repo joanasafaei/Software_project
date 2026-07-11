@@ -363,7 +363,7 @@ public class MainController {
             for (ParkingSession s : sessions) {
                 String plate = s.getVehicle().getPlateNumber();
                 String type = (s.getVehicle().getType() == VehicleType.CAR) ? "خودرو" : "موتور";
-                String entryTime = PersianDateUtil.toPersianDateTime(s.getEntryTime());
+                String entryTime = PersianDateUtil.toPersianDateTime(s.getEntryTime().minusHours(1));
                 activeListView.getItems().add( "پلاک: " + plate + " (" + type + ") - ورود: " + entryTime);
             }
             if (sessions.isEmpty()) {
@@ -667,8 +667,8 @@ public class MainController {
         // ثبت خروج
         try {
             ParkingTicket ticket = parkingService.registerExit(fullPlate,currentUser.getUsername());
-            String entryTime = PersianDateUtil.toPersianDateTime(ticket.getVehicle().getEntryTime());
-            String exitTime = PersianDateUtil.toPersianDateTime(ticket.getExitTime());
+            String entryTime = PersianDateUtil.toPersianDateTime(ticket.getVehicle().getEntryTime().minusHours(1));
+            String exitTime = PersianDateUtil.toPersianDateTime(ticket.getExitTime().minusHours(1));
 
             String receiptText = String.format(
                     "════════════════════ رسید پارکینگ ════════════════════\n" +
